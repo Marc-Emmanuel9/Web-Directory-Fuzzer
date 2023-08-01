@@ -1,9 +1,5 @@
 import requests, sys, os
 
-defaultPath = [os.path.dirname(os.path.realpath(__file__)) + "\wordlist\default.txt"]
-url = sys.argv[1]
-exclude_status = [404]
-
 def progress_bar(current, total, bar_length=20):
     fraction = current / total
 
@@ -28,6 +24,9 @@ def getWordlist(path):
 
     return wordlist
 
+defaultPath = [os.path.dirname(os.path.realpath(__file__)) + "\wordlist\default.txt"]
+url = sys.argv[1]
+exclude_status = [404]
 wordlist = getWordlist(defaultPath[0])
 
 def getStatus(url, word):
@@ -38,9 +37,8 @@ def getStatus(url, word):
     
     return rq.status_code
 
-i = 0
-for word in wordlist:
-    i += 1
+for idx, word in enumerate(wordlist, start=1):
+
     result = getStatus(url, word)
 
     if int(result) not in exclude_status:
@@ -49,4 +47,4 @@ for word in wordlist:
         else:
             print(f'[*]  {result} : {word} -> {url}/{word}')
     
-    progress_bar(i, len(wordlist), bar_length=20)
+    progress_bar(idx, len(wordlist), bar_length=20)
